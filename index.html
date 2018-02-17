@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>js星级评分系统</title>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding:0;
+        }
+        #star{
+            position:relative;
+            width:200px;
+            height:20px;
+            margin:50px auto;
+        }
+        #star span{
+            color:red;
+            float:left;
+            line-height:20px;
+        }
+        #star ul{
+            width:120px;
+            height:20px;
+            float:left;
+            list-style:none;
+        }
+        #star ul li{
+            width:20px;
+            height:20px;
+            float:left;
+            background:url("images/star.png");
+        }
+        #star .text{
+            position:absolute;
+            left:180px;
+            top:-17px;
+            width:100px;
+            height:50px;
+            border:1px solid #ccc;
+            float:left;
+            color:#666;
+            font-size:12px;
+        }
+        #star ul li.active{
+            background-position:0 -30px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="star">
+        <span>星际评分</span>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="text">
+            提示：请认真的给当前文章打分！
+        </div>
+    </div>
+    <script type="text/javascript">
+        var star = document.getElementById("star");
+        var oLi = star.getElementsByTagName("li");
+        var n;
+        //console.log(oLi);
+//        var oText = document.getElementsByClassName("text");
+//        console.log(oText);
+       // getElementsByClassName的兼容写法
+        /*
+        *   className 类名
+         *   parent 父元素
+         *   tagName 需要获取的标签
+        * */
+        function getElementsByClassName(className,parent,tagName){
+            var parent = parent || document;
+            var tagName = tagName || "*";
+            var el = [];
+            //通过标签名来获取元素
+            var Eles = parent.getElementsByTagName(tagName);
+            for(var i=0;i<Eles.length;i++){
+                //获取选中每个标签的类名
+                var aClassName = Eles[i].className.split(" ");//是以 空格 来区分 多个类名
+                //console.log(aClassName);
+                for(var j=0;j<aClassName.length; j++){
+                    if(aClassName[j] == className){
+                        //alert("获取成功");
+                        el.push(Eles[i]);
+                        break;//判断成功一次就跳出循环提高代码的执行效率
+                    }
+                }
+            }
+            return el;
+        };
+       var oText = getElementsByClassName("text",star,"div");
+        //console.log(oText);
+        var txt = ["较差","较差","还行","推荐","力荐"];
+        //鼠标移动到谁上面给谁添加一个active类名
+        for(var i=0;i<oLi.length;i++){
+            oLi[i].index = i;//给每个li添加一个自定义属性存储索引
+            oLi[i].onmouseover = function(){
+                //先把所有的都去除active类名
+                for(var k=0;k<oLi.length;k++){
+                    oLi[k].className="";
+                }
+                //this鼠标移动到谁上面就指代谁
+                //console.log(this.index);
+                for(var j=0;j<=this.index;j++){
+                    oLi[j].className="active";
+                    oText[0].innerHTML = txt[j];
+                }
+            }
+            oLi[i].onmouseout=function(){
+                for(var k=0;k<oLi.length;k++){
+                    oLi[k].className="";
+                }
+                oText[0].innerHTML = " 提示：请认真的给当前文章打分！";
+                fn(n);
+            }
+            oLi[i].onclick=function(){
+                n=this.index;
+                fn(this.index);
+            }
+
+        }
+        function fn(index){
+            for(var i=0;i<=index;i++){
+                oLi[i].className="active";
+                oText[0].innerHTML = txt[i];
+            }
+
+
+        }
+    </script>
+</body>
+</html>
